@@ -947,6 +947,19 @@ __C.ROOT_DIR = os.getcwd()
 # Output basedir
 __C.OUTPUT_DIR = '/tmp'
 
+# Before training, please modify the following two directories. By Jin.
+# -------------------------------------------------------------------------- #
+# The directory to store the pre-training model
+# e.g. PATH TO MODEL_DIR/R-50.pkl, PATH TO MODEL_DIR/R-101.pkl
+__C.MODEL_DIR = 'none'
+# The directory to store your dataset
+# e.g. PATH TO DATASET_DIR/coco/coco_train2014, // train images
+#      PATH TO DATASET_DIR/coco/val2014,        // validate images
+#      PATH TO DATASET_DIR/coco/annotations/instances_train2014.json // train labels
+#      PATH TO DATASET_DIR/coco/annotations/instances_val2014.json // validate labels
+__C.DATASET_DIR = 'none'
+# -------------------------------------------------------------------------- #
+
 # Name (or path to) the matlab executable
 __C.MATLAB = 'matlab'
 
@@ -1065,7 +1078,7 @@ _RENAMED_MODULES = {
 }
 
 
-def assert_and_infer_cfg(cache_urls=True, make_immutable=True):
+def assert_and_infer_cfg(cache_urls=True, local_name=True, make_immutable=True):
     """Call this function in your script after you have finished setting all cfg
     values that are necessary (e.g., merging a config from a file, merging
     command line config options, etc.). By default, this function will also
@@ -1079,8 +1092,23 @@ def assert_and_infer_cfg(cache_urls=True, make_immutable=True):
         __C.TEST.PRECOMPUTED_PROPOSALS = False
     if cache_urls:
         cache_cfg_urls()
+    if local_name:
+        get_local_path()
     if make_immutable:
         cfg.immutable(True)
+
+
+def get_local_path():
+    """Get local models' absolute path by __C.MODEL_DIR and model names
+    """
+    if __C.TRAIN.WEIGHTS.startswith("ModelDir"):
+        assert __C.MODEL_DIR != 'none', 'Please set MODEL_DIR in path-to-Detectron/detectron/core/config.py'
+        model_name = __C.TRAIN.WEIGHTS[len("ModelDir/"):]
+        __C.TRAIN.WEIGHTS = os.path.join(__C.MODEL_DIR, model_name)
+    if __C.TEST.WEIGHTS.startswith("ModelDir"):
+        assert __C.MODEL_DIR != 'none', 'Please set MODEL_DIR in path-to-Detectron/detectron/core/config.py'
+        model_name = __C.TEST.WEIGHTS[len("ModelDir/"):]
+        __C.TEST.WEIGHTS = os.path.join(__C.MODEL_DIR, model_name)
 
 
 def cache_cfg_urls():

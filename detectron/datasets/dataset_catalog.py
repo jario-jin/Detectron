@@ -21,10 +21,12 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
+from detectron.core.config import cfg
 
 
 # Path to data dir
-_DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+assert cfg.DATASET_DIR != 'none', 'Please set DATASET_DIR in path-to-Detectron/detectron/core/config.py'
+_DATA_DIR = cfg.DATASET_DIR  # os.path.join(os.path.dirname(__file__), 'data')
 
 # Required dataset entry keys
 _IM_DIR = 'image_directory'
