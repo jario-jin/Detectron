@@ -947,16 +947,19 @@ __C.ROOT_DIR = os.getcwd()
 # Output basedir
 __C.OUTPUT_DIR = '/tmp'
 
+# -------------------------------------------------------------------------- #
 # Before training, please modify the following two directories. By Jin.
 # -------------------------------------------------------------------------- #
 # The directory to store the pre-training model
 # e.g. PATH TO MODEL_DIR/R-50.pkl, PATH TO MODEL_DIR/R-101.pkl
+# __C.MODEL_DIR = '/home/jario/spire-net-1806/detectron/models'  # my setting
 __C.MODEL_DIR = 'none'
 # The directory to store your dataset
 # e.g. PATH TO DATASET_DIR/coco/coco_train2014, // train images
 #      PATH TO DATASET_DIR/coco/val2014,        // validate images
 #      PATH TO DATASET_DIR/coco/annotations/instances_train2014.json // train labels
 #      PATH TO DATASET_DIR/coco/annotations/instances_val2014.json // validate labels
+# __C.DATASET_DIR = '/home/jario/dataset'  # my setting
 __C.DATASET_DIR = 'none'
 # -------------------------------------------------------------------------- #
 
@@ -1002,6 +1005,21 @@ __C.CLUSTER = AttrDict()
 
 # Flag to indicate if the code is running in a cluster environment
 __C.CLUSTER.ON_CLUSTER = False
+
+
+# ---------------------------------------------------------------------------- #
+# Debug options
+# ---------------------------------------------------------------------------- #
+__C.DEBUG = AttrDict()
+
+# Output bbox, mask, kps results by RCNN
+__C.DEBUG.OUTPUT_ANNO = False
+
+# Annotations output path
+__C.DEBUG.ANNO_PATH = 'detection-1'
+
+# When bounding-box score higher than threshold, output it
+__C.DEBUG.BBOX_THRS = 0.5
 
 
 # ---------------------------------------------------------------------------- #

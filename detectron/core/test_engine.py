@@ -39,11 +39,15 @@ from detectron.datasets.json_dataset import JsonDataset
 from detectron.modeling import model_builder
 from detectron.utils.io import save_object
 from detectron.utils.timer import Timer
+from detectron.utils.sp_tools_helper import output_annotations
 import detectron.utils.c2 as c2_utils
 import detectron.utils.env as envu
 import detectron.utils.net as net_utils
 import detectron.utils.subprocess as subprocess_utils
 import detectron.utils.vis as vis_utils
+
+import detectron.datasets.dataset_catalog as dataset_catalog
+import detectron.datasets.dummy_datasets as dummy_datasets
 
 logger = logging.getLogger(__name__)
 
@@ -235,6 +239,12 @@ def test_net(
     num_images = len(roidb)
     num_classes = cfg.MODEL.NUM_CLASSES
     all_boxes, all_segms, all_keyps = empty_results(num_classes, num_images)
+    # ---------------------------------------------------------------------------- #
+    non_cat = dataset_catalog.get_cat_nm(cfg.TEST.DATASETS[0]) is None
+    if not non_cat:
+        dummy_coco_dataset = getattr(dummy_datasets,
+                                     dataset_catalog.get_cat_nm(cfg.TEST.DATASETS[0]))()
+    # ---------------------------------------------------------------------------- #
     timers = defaultdict(Timer)
     for i, entry in enumerate(roidb):
         if cfg.TEST.PRECOMPUTED_PROPOSALS:
@@ -256,6 +266,13 @@ def test_net(
             cls_boxes_i, cls_segms_i, cls_keyps_i = im_detect_all(
                 model, im, box_proposals, timers
             )
+
+        # ---------------------------------------------------------------------------- #
+        if not non_cat:
+            # Output detection results on Test Dataset Here !!!
+            output_annotations(os.path.basename(entry['image']), im, cls_boxes_i, cls_segms_i, 
+                               cls_keyps_i, dummy_coco_dataset.classes)
+        # ---------------------------------------------------------------------------- #
 
         extend_results(i, all_boxes, cls_boxes_i)
         if cls_segms_i is not None:

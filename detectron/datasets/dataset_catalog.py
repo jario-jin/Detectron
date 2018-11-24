@@ -31,6 +31,7 @@ _DATA_DIR = cfg.DATASET_DIR  # os.path.join(os.path.dirname(__file__), 'data')
 # Required dataset entry keys
 _IM_DIR = 'image_directory'
 _ANN_FN = 'annotation_file'
+_CAT_NM = 'category_names'
 
 # Optional dataset entry keys
 _IM_PREFIX = 'image_prefix'
@@ -68,25 +69,33 @@ _DATASETS = {
         _IM_DIR:
             _DATA_DIR + '/coco/coco_train2014',
         _ANN_FN:
-            _DATA_DIR + '/coco/annotations/instances_train2014.json'
+            _DATA_DIR + '/coco/annotations/instances_train2014.json',
+        _CAT_NM:
+            'get_coco_dataset'
     },
     'coco_2014_val': {
         _IM_DIR:
             _DATA_DIR + '/coco/coco_val2014',
         _ANN_FN:
-            _DATA_DIR + '/coco/annotations/instances_val2014.json'
+            _DATA_DIR + '/coco/annotations/instances_val2014.json',
+        _CAT_NM:
+            'get_coco_dataset'
     },
     'coco_2014_minival': {
         _IM_DIR:
             _DATA_DIR + '/coco/coco_val2014',
         _ANN_FN:
-            _DATA_DIR + '/coco/annotations/instances_minival2014.json'
+            _DATA_DIR + '/coco/annotations/instances_minival2014.json',
+        _CAT_NM:
+            'get_coco_dataset'
     },
     'coco_2014_valminusminival': {
         _IM_DIR:
             _DATA_DIR + '/coco/coco_val2014',
         _ANN_FN:
-            _DATA_DIR + '/coco/annotations/instances_valminusminival2014.json'
+            _DATA_DIR + '/coco/annotations/instances_valminusminival2014.json',
+        _CAT_NM:
+            'get_coco_dataset'
     },
     'coco_2015_test': {
         _IM_DIR:
@@ -205,6 +214,14 @@ _DATASETS = {
             _DATA_DIR + '/VOC2012/VOCdevkit2012'
     }
 }
+
+
+def get_cat_nm(name):
+    """Retrieve the dataset categories names."""
+    if _CAT_NM in _DATASETS[name].keys():
+        return _DATASETS[name][_CAT_NM]
+    else:
+        return None
 
 
 def datasets():
