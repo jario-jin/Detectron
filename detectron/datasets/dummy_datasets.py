@@ -45,3 +45,15 @@ def get_coco_dataset():
     ]
     ds.classes = {i: name for i, name in enumerate(classes)}
     return ds
+
+
+def get_vis_drone_dataset():
+    """A dummy vis_drone dataset that includes only the 'classes' field."""
+    ds = AttrDict()
+    classes = [
+        '__background__', 'awning-tricycle', 'bicycle', 'bus', 'car', 'ignored-regions',
+        'motor', 'others', 'pedestrian', 'people', 'tricycle', 'truck',
+        'van'
+    ]
+    ds.classes = {i: name for i, name in enumerate(classes)}
+    return ds

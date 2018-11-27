@@ -1,17 +1,17 @@
 MODEL:
   TYPE: generalized_rcnn
   CONV_BODY: FPN.add_fpn_ResNet50_conv5_body
-  NUM_CLASSES: 81
+  NUM_CLASSES: 13  # vis_drone
   FASTER_RCNN: True
-  MASK_ON: True
-NUM_GPUS: 8
+  MASK_ON: False
+NUM_GPUS: 1
 SOLVER:
   WEIGHT_DECAY: 0.0001
   LR_POLICY: steps_with_decay
-  BASE_LR: 0.02
+  BASE_LR: 0.0025
   GAMMA: 0.1
-  MAX_ITER: 270000
-  STEPS: [0, 210000, 250000]
+  MAX_ITER: 90000
+  STEPS: [0, 60000, 80000]
 FPN:
   FPN_ON: True
   MULTILEVEL_ROIS: True
@@ -27,24 +27,16 @@ FAST_RCNN:
   ROI_XFORM_METHOD: RoIAlign
   ROI_XFORM_RESOLUTION: 7
   ROI_XFORM_SAMPLING_RATIO: 2
-MRCNN:
-  ROI_MASK_HEAD: mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs_gn  # Note: this is a GN mask head
-  RESOLUTION: 28  # (output mask resolution) default 14
-  ROI_XFORM_METHOD: RoIAlign
-  ROI_XFORM_RESOLUTION: 14  # default 7
-  ROI_XFORM_SAMPLING_RATIO: 2  # default 0
-  DILATION: 1  # default 2
-  CONV_INIT: MSRAFill  # default GaussianFill
 TRAIN:
   WEIGHTS: ModelDir/R-50-GN.pkl  # Note: a GN pre-trained model
-  DATASETS: ('coco_2014_train', 'coco_2014_valminusminival')
+  DATASETS: ('coco_vis_drone_train',)
   SCALES: (800,)
   MAX_SIZE: 1333
-  BATCH_SIZE_PER_IM: 512
+  IMS_PER_BATCH: 1
+  BATCH_SIZE_PER_IM: 256  # 512
   RPN_PRE_NMS_TOP_N: 2000  # Per FPN level
 TEST:
-  WEIGHTS: ModelDir/Mask-R-CNN-R-50-FPN-GN-3x.pkl
-  DATASETS: ('coco_2014_minival',)
+  DATASETS: ('coco_vis_drone_val',)
   SCALE: 800
   MAX_SIZE: 1333
   NMS: 0.5
@@ -52,4 +44,4 @@ TEST:
   RPN_POST_NMS_TOP_N: 1000
 DEBUG:
   OUTPUT_ANNO: True
-OUTPUT_DIR: /tmp/mask_rcnn_r50_gn
+OUTPUT_DIR: /tmp/faster_rcnn_r50_gn

@@ -40,6 +40,22 @@ _RAW_DIR = 'raw_dir'
 
 # Available datasets
 _DATASETS = {
+    'coco_vis_drone_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_vis_drone_train',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/bbox_vis_drone_train.json',
+        _CAT_NM:
+            'get_vis_drone_dataset'
+    },
+    'coco_vis_drone_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_vis_drone_val',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/bbox_vis_drone_val.json',
+        _CAT_NM:
+            'get_vis_drone_dataset'
+    },
     'cityscapes_fine_instanceonly_seg_train': {
         _IM_DIR:
             _DATA_DIR + '/cityscapes/images',
